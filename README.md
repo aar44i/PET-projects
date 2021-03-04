@@ -1,8 +1,8 @@
 # PET-projects
-This is my pet-projects that i done during studing Computer Science
+This is my pet-projects that i have done during studing Computer Science
 
 ## Gess_number 
-Gess_number is virst ever progect aimed on styding conditions, loops, functions. 
+Gess_number is first ever project aimed on styding conditions, loops, functions. 
 
   This program for finding a hidden number is based on the QuickSort method.
 Each time the guessed number is compared with the average value of the interval.
