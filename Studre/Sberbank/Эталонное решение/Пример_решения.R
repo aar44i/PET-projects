@@ -5,11 +5,11 @@ library(zoo)
 data=read.csv2('data.csv', header = T, stringsAsFactors = F)
 data$REPORTDATE = as.Date(data$REPORTDATE,format = '%d.%m.%Y')
 
-#Р›РѕРіР°СЂРёС„РјРёСЂСѓРµРј РѕР±СЉРµРјС‹
+#Логарифмируем объемы
 
 data$VALUE = log(data$VALUE)
 
-#Р¤СѓРЅРєС†РёСЏ СЂР°СЃС‡РµС‚Р° СЃС‚Р°Р±РёР»СЊРЅРѕР№ С‡Р°СЃС‚Рё РЅР° РґР°С‚Сѓ
+#Функция расчета стабильной части на дату
 
 stableOnDate = function(report_date, data){
   
@@ -21,7 +21,7 @@ stableOnDate = function(report_date, data){
   
   df = filter(data, REPORTDATE > report_date - h, REPORTDATE <= report_date)
   
-  #РјР°СЃС€С‚Р°Р±РёСЂСѓРµРј РґР°РЅРЅС‹Рµ
+  #масштабируем данные
   y  = df$VALUE; my = mean(y) ; sdy = sd(y);   y = (y - my)/sdy
   
   
@@ -39,10 +39,10 @@ stableOnDate = function(report_date, data){
   trend    = function(x,y)   1/(x+365) * 1/(y+365)
   seasonRBF = function(len,period) function(x,y) exp(- (1/(len)^2)* 2*(sin(pi*abs(x-y)/period))^2  )
   
-  #РџСЂРёРјРµРЅРёС‚СЊ С„СѓРЅРєС†РёСЋ Рє РїРѕРїР°СЂРЅС‹Рј Р·РЅР°С‡РµРЅРёСЏРј
+  #Применить функцию к попарным значениям
   makeMat   = function(x,fun) outer(x,x,fun)
   
-  #РњР°СЃС€С‚Р°Р±РёСЂСѓРµРј РјР°С‚СЂРёС†Сѓ С‚СЂРµРЅРґР°
+  #Масштабируем матрицу тренда
   Ktrend   = makeMat(x_and_xpredict,trend) ; Ktrend = (Ktrend - mean(Ktrend)); Ktrend = (Ktrend)/max(Ktrend)
   Season  = function(x,f)   makeMat(x_and_xpredict,seasonRBF(1,x) )
   
@@ -86,15 +86,15 @@ stableOnDate = function(report_date, data){
   
   
   
-  #РћР±СЂР°С‚РЅРѕРµ РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ
+  #Обратное масштабирование
   pred = pred*sdy  + my
   fit  = fit*sdy   + my
   
   
-  #Р‘Р°РєРµС‚С‹
+  #Бакеты
   ts      = seq(365/12,365,365/12)
   
-  #РџРѕСЃС‡РёС‚Р°РµРј РґР»СЏ РєР°Р¶РґРѕРіРѕ Р±Р°РєРµС‚Р° СЃС‚Р°Р±РёР»СЊРЅСѓСЋ С‡Р°СЃС‚СЊ
+  #Посчитаем для каждого бакета стабильную часть
   stable_levels = lapply(ts,function(t) c(last(df$VALUE),head(pred,t))%>% min)
   stable_levels = as.numeric(stable_levels)
   names = c('1m','2m','3m','4m','5m','6m','7m','8m','9m','10m','11m','12m')
@@ -116,7 +116,7 @@ stableOnDate = function(report_date, data){
 
 
 
-#Р¤Р°РєС‚ СЃС‚Р°Р±РёР»СЊРЅРѕР№ С‡Р°СЃС‚Рё РЅР° РґР°С‚Сѓ РЅР° РіРѕСЂРёР·РѕРЅС‚Рµ h, РЅР° РґР°С‚Сѓ report_date
+#Факт стабильной части на дату на горизонте h, на дату report_date
 stablesFact = function(h,report_date,data=data){
   df = filter(data,REPORTDATE <= report_date+h, REPORTDATE >= report_date)
   min(df$VALUE)
@@ -124,7 +124,7 @@ stablesFact = function(h,report_date,data=data){
   
 
 
-#CСЂР°РІРЅРёРІР°РµРј
+#Cравниваем
 
 t = as.Date('2018-08-23')
 model = stableOnDate(t,data)
