@@ -9,3 +9,7 @@ HydroStat/Транспонирование АИС ГМВО/Север/Онега
 *.zip
 *.html
 *.rar
+SoilGrid/wosis-master/wosis-master/R_scripts/WoSIS_Snapshot_With_R.Rmd
+*.R
+*.Rmd
+*.pdf
