@@ -1,0 +1,18 @@
+!table
+!version 300
+!charset Neutral
+
+Definition Table
+  File "Gelenzhik.tif"
+  Type "RASTER"
+  (37.96820819, 44.58166852) (0, 0) Label "Point 1",
+  (37.97490835, 44.57604020) (1249, 1473) Label "Point 2",
+  (37.96820819, 44.57604020) (0, 1473) Label "Point 3",
+  (37.97490835, 44.58166852) (1249, 0) Label "Point 4",
+  (37.97156096, 44.57885252) (624, 736) Label "Point 5",
+  (37.97156096, 44.58166852) (624, 0) Label "Point 6",
+  (37.96820819, 44.57885252) (0, 736) Label "Point 7",
+  (37.97490835, 44.57885252) (1249, 736) Label "Point 8",
+  (37.97156096, 44.57604020) (624, 1473) Label "Point 9"
+ CoordSys Earth Projection 10, 157, 7, 0
+ Units "degree"
